@@ -1,4 +1,4 @@
-const { Schema, Types } = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const userSchema = new Schema(
     {
@@ -12,8 +12,7 @@ const userSchema = new Schema(
             type: String,
             required: true,
             unique: true,
-            // validation
-            match: [], //add a regex for email
+            match: [/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/],
         },
         thoughts: [
             {
@@ -31,19 +30,17 @@ const userSchema = new Schema(
     {
         toJSON: {
             virtuals: true,
-          },
-          id: false,
+        },
+        timestamps: true,
     }
 );
 
 userSchema.virtual('friendCount')
-.get(function () {
-    // Create a virtual called `friendCount` that retrieves the length of the user's `friends` array field on query.
-})
-.set(function () {
+    .get(function () {
+        return this.friends.length;
+    });
 
-});
-
-const User = model('user', userSchema);
+const User = model('User', userSchema);
 
 module.exports = User;
+
