@@ -11,6 +11,8 @@ const seedUsernames = [
     'Ethan',
 ];
 
+const seedEmails = seedUsernames.map(username => `${username.toLowerCase()}@gmail.com`);
+
 const seedThoughts = [
     'seed thought 1',
     'seed thought 2',
@@ -41,19 +43,21 @@ const users = [];
 // Get a random item given an array
 const getRandomArrItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-// Gets a random full name
+
 const getRandomName = () =>
-  `${getRandomArrItem(seedUsernames)} ${getRandomArrItem(seedUsernames)}`;
+  `${getRandomArrItem(seedUsernames)}`;
 
 // Function to generate random applications that we can add to the database. Includes application tags.
 const getRandomThoughts = (int) => {
   let results = [];
   for (let i = 0; i < int; i++) {
+
+    const username = getRandomArrItem(seedUsernames);
+
     results.push({
-      published: Math.random() < 0.5,
-      description: getRandomArrItem(seedThoughts),
-      buildSuccess: Math.random() < 0.5,
-      tags: [...getReactions(3)],
+        thoughtText: getRandomArrItem(seedThoughts),
+        username: username,
+        reactions: [...getReactions(3)],
     });
   }
   return results;
@@ -67,7 +71,7 @@ const getReactions = (int) => {
   const results = [];
   for (let i = 0; i < int; i++) {
     results.push({
-      tagBody: getRandomArrItem(seedReacts),
+      reactionBody: getRandomArrItem(seedReacts),
       username: getRandomName(),
     });
   }
@@ -75,4 +79,4 @@ const getReactions = (int) => {
 };
 
 // Export the functions for use in seed.js
-module.exports = { getRandomName, getRandomThoughts };
+module.exports = { getRandomName, getRandomThoughts, seedEmails, seedUsernames };
