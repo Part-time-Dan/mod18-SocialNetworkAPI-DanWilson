@@ -7,7 +7,6 @@ const getRandomArrItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 connection.on('error', (err) => console.error(err));
 
-// Inside your seed.js file
 connection.once('open', async () => {
     console.log('Connected to database');
 
