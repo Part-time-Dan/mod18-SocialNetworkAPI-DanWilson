@@ -46,14 +46,16 @@ const userController = {
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
             }
-            
+
+            const username = user.username;
+
             // Delete the user's associated thoughts
             await Thought.deleteMany({ username: user.username });
 
             // Delete the user
             await User.deleteOne({ _id: user._id });
 
-            res.json({ message: 'User and associated thoughts deleted' });
+            res.json({ message: `User '${username}' and associated thoughts deleted` });
         } catch (err) {
             res.status(500).json(err);
         }
@@ -65,13 +67,19 @@ const userController = {
                 req.params.userId,
                 { $addToSet: { friends: req.params.friendId } },
                 { new: true }
-            ).populate('friends');
-
+            );
+    
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
             }
-
-            res.json(user);
+    
+            const newFriend = await User.findById(req.params.friendId);
+    
+            if (!newFriend) {
+                return res.status(404).json({ message: 'Friend not found' });
+            }
+    
+            res.json({ message: `${newFriend.username} added as a friend` });
         } catch (err) {
             res.status(500).json(err);
         }
@@ -83,13 +91,19 @@ const userController = {
                 req.params.userId,
                 { $pull: { friends: req.params.friendId } },
                 { new: true }
-            ).populate('friends');
-
+            );
+    
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
             }
-
-            res.json(user);
+    
+            const removedFriend = await User.findById(req.params.friendId);
+            if (!removedFriend) {
+                return res.status(404).json({ message: 'Friend not found' });
+            }
+    
+            res.json({ 
+                message: `${removedFriend.username} is no longer a friend`});
         } catch (err) {
             res.status(500).json(err);
         }
