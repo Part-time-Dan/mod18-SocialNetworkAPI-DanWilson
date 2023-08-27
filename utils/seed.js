@@ -93,5 +93,3 @@ connection.once('open', async () => {
         process.exit(0);
     }
 });
-
-

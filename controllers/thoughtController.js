@@ -1,10 +1,18 @@
-const { Thought } = require('../models');
+const { Thought, User } = require('../models');
 
 const thoughtController = {
     getAllThoughts: async (req, res) => {
         try {
-            const thoughts = await Thought.find().populate('username');
-            res.json(thoughts);
+            const thoughts = await Thought.find().populate('username').populate('reactions');
+
+            const reactionCount = thoughts.map(thought => ({
+                _id: thought._id,
+                thoughtText: thought.thoughtText,
+                username: thought.username,
+                reactionCount: thought.reactions.length // Count of reactions
+            }));
+
+            res.json(reactionCount);
         } catch (err) {
             res.status(500).json(err);
         }
@@ -26,7 +34,15 @@ const thoughtController = {
 
     createThought: async (req, res) => {
         try {
+            
             const thought = await Thought.create(req.body);
+    
+            await User.findByIdAndUpdate(
+                req.body.userId, // "userId" for the JSON data to match the User _id
+                { $push: { thoughts: thought._id } }, // push the new thought's ID into the thoughts array
+                { new: true } // return the updated user document
+            );
+    
             res.json(thought);
         } catch (err) {
             res.status(400).json(err);
@@ -54,12 +70,13 @@ const thoughtController = {
     deleteThought: async (req, res) => {
         try {
             const thought = await Thought.findById(req.params.thoughtId);
+            console.log(thought)
 
             if (!thought) {
                 return res.status(400).json({ message: 'Thought not found' });
             }
 
-            await thought.remove();
+            await Thought.deleteOne({ _id: thought._id });
 
             res.json({ message: 'Thought deleted' });
         } catch (err) {
