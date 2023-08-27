@@ -18,7 +18,7 @@ const thoughtSchema = new Schema(
             type: String,
             required: true,
         },
-        reactions: [Reaction], 
+        reactions: [Reaction], // embed Reaction as a subdocument in Thought model
     },
     {
         toJSON: {

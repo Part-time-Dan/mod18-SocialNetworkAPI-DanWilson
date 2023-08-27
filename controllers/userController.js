@@ -12,8 +12,23 @@ const userController = {
 
     getUserById: async (req, res) => {
         try {
-            const user = await User.findById(req.params.id).populate('thoughts').populate('friends');
-            res.json(user);
+            const user = await User.findById(req.params.id)
+                .select('username email') 
+                .populate({
+                    path: 'thoughts',
+                    select: 'thoughtText createdAt reactions.reactionBody reactions.username', 
+                })
+                .populate({
+                    path: 'friends',
+                    select: 'username', 
+                });
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            const userObj = user.toObject();
+            userObj.friendCount = user.friendCount; 
+
+            res.json(userObj);
         } catch (err) {
             res.status(500).json(err);
         }
