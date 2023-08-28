@@ -1,0 +1,31 @@
+{
+  "name": "mod18-socialnetworkapi-danwilson",
+  "version": "1.0.0",
+  "description": "bootcamp assignment using Insomia to demo routes in a mongoDB/mongoose db",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index",
+    "dev": "nodemon index",
+    "seed": "node utils/seed.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Part-time-Dan/mod18-SocialNetworkAPI-DanWilson.git"
+  },
+  "keywords": [],
+  "author": "DanielWilson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Part-time-Dan/mod18-SocialNetworkAPI-DanWilson/issues"
+  },
+  "homepage": "https://github.com/Part-time-Dan/mod18-SocialNetworkAPI-DanWilson#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongodb": "^5.8.1",
+    "mongoose": "^7.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
