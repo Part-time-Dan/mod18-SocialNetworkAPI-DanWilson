@@ -56,21 +56,19 @@ const userController = {
         console.log(req.params.id);
         try {
             const user = await User.findById(req.params.id);
-            console.log(user)
+            console.log(user.thoughts)
 
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
             }
 
-            const username = user.username;
-
             // Delete the user's associated thoughts
-            await Thought.deleteMany({ username: user.username });
+            await Thought.deleteMany({ _id: { $in: user.thoughts } });
 
             // Delete the user
             await User.deleteOne({ _id: user._id });
 
-            res.json({ message: `User '${username}' and associated thoughts deleted` });
+            res.json({ message: `User '${user.username}' and associated thoughts deleted` });
         } catch (err) {
             res.status(500).json(err);
         }
