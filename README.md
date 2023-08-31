@@ -46,7 +46,7 @@ Next, type ```npm run dev``` in the terminal. You should receive confirmation th
 API server running on port 3001!
 ```
 
-From here, use Insomia to hit the following CRUD routes using the address bar (URL should look something like this: ```http://localhost:3001/api/users```):
+From here, use Insomia to hit the following CRUD routes using the address bar (URL should look something like this: ```http://localhost:3001/api/users```:
 
 **`/api/users`**
 * `GET` all users
